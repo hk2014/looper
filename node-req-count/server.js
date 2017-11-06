@@ -1,7 +1,6 @@
 var url = require('url');
 var http = require('http');
 var path = require('path');
-var fs = require('fs');
 
 var globalCounter = {};
 
@@ -11,27 +10,21 @@ var server = http.createServer(function(request, response) {
 
   if (request.method === 'POST') {
     // YOUR CODE HERE
-    console.log(path);
-    fs.readFile(endpoint, function(err, data){
-      console.log(data);
-      if(err){
-        throw err;
-      }
-      globalCounter[dogs] = 1;
-      res.end(globalCounter);
-    })
+    //console.log(path);
+    if(globalCounter[property]){
+      globalCounter[property]++;
+    }else{
+      globalCounter[property]=1;
+    }
+    response.statusCode = 201;
+    response.setHeader('Content-Type', 'text/plain');
+    response.end(`${property}`)
 
   } else if (request.method === 'GET') {
     // YOUR CODE HERE
-      console.log(path);
-    fs.readFile(endpoint, function(err, data){
-      console.log(data);
-      if(err){
-        throw err;
-      }
-      globalCounter[dogs] = data;
-      res.end(globalCounter);
-    })
+    response.statusCode = 200;
+    response.setHeader('Content-Type', 'text/plain');
+    response.end(JSON.stringify(globalCounter[property]));
   } else {
     response.statusCode = 404;
     response.end();
